@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from "axios"
 
 interface ForgotPasswordModalProps {
   isOpen: boolean
@@ -12,6 +13,9 @@ interface ForgotPasswordModalProps {
   initialEmail?: string
   onReturnToLogin: () => void
 }
+
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
 export function ForgotPasswordModal({ isOpen, onClose, initialEmail = "", onReturnToLogin }: ForgotPasswordModalProps) {
   const [email, setEmail] = useState(initialEmail)
@@ -39,17 +43,14 @@ export function ForgotPasswordModal({ isOpen, onClose, initialEmail = "", onRetu
     setError("")
 
     try {
-      const response = await fetch("/api/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmedEmail }),
-      })
 
-      if (response.ok) {
+      const resp = await axios.post(`${baseUrl}/auth/forgotPassword`, { email: trimmedEmail })
+
+      if (resp.status === 200) {
         setIsSuccess(true)
       } else {
-        const data = await response.json()
-        setError(data.message || "Failed to send reset code. Please try again.")
+        setError(resp.data.message || "Failed to send reset code. Please try again.")
+        setIsSuccess(false)
       }
     } catch (err) {
       setError("An error occurred. Please try again.")
@@ -57,6 +58,7 @@ export function ForgotPasswordModal({ isOpen, onClose, initialEmail = "", onRetu
       setIsSubmitting(false)
     }
   }
+
 
 
   const handleClose = () => {

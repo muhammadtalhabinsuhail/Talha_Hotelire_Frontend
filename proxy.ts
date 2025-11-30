@@ -17,13 +17,13 @@ export async function proxy(request: NextRequest) {
   try {
     // ✅ Verify token using jose
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const { payload }:any = await jwtVerify(token, secret);
+    const { payload }: any = await jwtVerify(token, secret);
 
     //    url.searchParams.set("debug", JSON.stringify(payload));
     //  return NextResponse.redirect(url);
 
 
-   const roleId = parseInt(payload.user?.roleid);
+    const roleId = parseInt(payload.user?.roleid);
 
 
     if (url.pathname.startsWith("/admin") && roleId !== 1) {
@@ -31,10 +31,27 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (url.pathname.startsWith("/owner") && roleId !== 2) {
-      url.pathname = "/unauthorized";
-      return NextResponse.redirect(url);
+    // if (url.pathname.startsWith("/owner") && roleId !== 2) {
+    //   url.pathname = "/unauthorized";
+    //   return NextResponse.redirect(url);
+    // }
+
+
+    if (url.pathname.startsWith("/owner")) {
+
+      // 1️⃣ Allow /owner/verification for everyone
+      if (url.pathname === "/owner/verification") {
+        return NextResponse.next();
+      }
+
+      // 2️⃣ For all other /owner/* routes → require roleId = 2
+      if (roleId !== 2) {
+        url.pathname = "/unauthorized";
+        return NextResponse.redirect(url);
+      }
     }
+
+
 
     return NextResponse.next();
   } catch (err) {

@@ -1,10 +1,16 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+
 export function Navigation() {
+  const pathname = usePathname();
+  const isActive = (href:string) => pathname === href || pathname.startsWith(href);
   return (
+    
     <nav className="w-full bg-white min-h-[80px] lg:h-[111px] flex flex-col lg:flex-row items-center justify-between px-4 md:px-8 lg:px-[203px] py-4 lg:py-0 gap-4 lg:gap-0">
       <Link href="/">
         <Image
@@ -16,33 +22,49 @@ export function Navigation() {
         />
       </Link>
 
-      <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-12 [font-family:'Inter',Helvetica] font-bold text-black text-[15px] lg:text-[17px]">
+      <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-6 [font-family:'Inter',Helvetica] font-bold text-black text-[15px] lg:text-[15px]">
         <Link
-          href="/explorecanada"
-          prefetch={false}
-          className="flex items-center gap-2 cursor-pointer hover:text-[#59A5B2] transition-colors duration-200"
+          href="/customer/explore-canada"
+            prefetch={false}
+          className={`flex items-center gap-2 cursor-pointer transition-colors duration-200 ${
+            isActive("/customer/explore-canada")
+              ? "text-[#59A5B2] border-b-2 border-[#59A5B2]"
+              : "hover:text-[#59A5B2]"
+          }`}
         >
           <span>EXPLORE CANADA</span>
           {/* <ChevronDownIcon className="w-[13px] h-2" aria-hidden="true" /> */}
         </Link>
         <Link
-          href="./customer/listing"
+          href="/customer/listing"
           prefetch={false}
-          className="cursor-pointer hover:text-[#59A5B2] transition-colors duration-200"
+         className={`cursor-pointer transition-colors duration-200 ${
+            isActive("/customer/listing")
+              ? "text-[#59A5B2] border-b-2 border-[#59A5B2]"
+              : "hover:text-[#59A5B2]"
+          }`}
         >
           SEARCH
         </Link>
         <Link
           href="/blog"
           prefetch={false}
-          className="cursor-pointer hover:text-[#59A5B2] transition-colors duration-200"
+             className={`cursor-pointer transition-colors duration-200 ${
+            isActive("/blog")
+              ? "text-[#59A5B2] border-b-2 border-[#59A5B2]"
+              : "hover:text-[#59A5B2]"
+          }`}
         >
           BLOG
         </Link>
         <Link
-          href="/contact"
+          href="./customer/contact"
           prefetch={false}
-          className="cursor-pointer hover:text-[#59A5B2] transition-colors duration-200"
+              className={`cursor-pointer transition-colors duration-200 ${
+            isActive("/contact")
+              ? "text-[#59A5B2] border-b-2 border-[#59A5B2]"
+              : "hover:text-[#59A5B2]"
+          }`}
         >
           CONTACT
         </Link>
@@ -54,7 +76,7 @@ export function Navigation() {
           className="w-full sm:w-[160px] lg:w-[181px] h-[45px] lg:h-[55px] bg-[#f5f6fd] rounded-[5px] border border-solid border-[#d9d9d9] [font-family:'Poppins',Helvetica] font-semibold text-[#59A5B2] text-xs lg:text-sm transition-all duration-200 hover:shadow-lg"
           asChild
         >
-          <a href="/customer/signin" rel="noopener noreferrer">
+          <a href="/owner/verification" rel="noopener noreferrer">
             LIST YOUR PROPERTY
           </a>
         </Button>

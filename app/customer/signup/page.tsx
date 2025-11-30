@@ -11,6 +11,7 @@ import Select from "react-select";
 import countryList from "react-select-country-list";
 import { provinceToCities } from "@/lib/province-to-cities";
 import axios from 'axios';
+import SignupSuccessModal from "@/components/SignupSuccessModal";
 
 
 type UserType = "customer" | "owner";
@@ -204,6 +205,13 @@ export default function SignupPage() {
     canadian_provinceid: "",
     canadian_cityid: ""
   });
+
+
+
+  //SUCCESS MODAL CODE
+    const [showModal, setShowModal] = useState(false)
+  
+
 
 
 
@@ -477,14 +485,18 @@ export default function SignupPage() {
 
       // Login successful, ab user data fetch karo /me se
       const userResponse = await axios.get(`${baseUrl}/auth/me`, { withCredentials: true });
-   if(userResponse){
-      router.push("/customer/signup/thank-you")
-   }
+
+   
+if (userResponse) {
+  setShowModal(true);
+
+
+  setTimeout(() => {
+    router.push("/customer");
+  }, 3000);
+}
+
   
-
-
-
-
     
     } catch (error) {
 
@@ -1242,6 +1254,8 @@ export default function SignupPage() {
             Copyright 2025, All rights reserved. – Hotelire.ca
           </div>
         </div>
+              <SignupSuccessModal isVisible={showModal} onClose={() => setShowModal(false)} />
+        
       </main>
     </div>
   );

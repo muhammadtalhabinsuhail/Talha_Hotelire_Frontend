@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@jridgewell/trace-mapping": "^0.3.31",
     "@neondatabase/serverless": "^1.0.2",
@@ -67,6 +71,7 @@
     "react-select-country-list": "^2.2.3",
     "recharts": "^3.3.0",
     "vaul": "^1.1.2",
+    "wouter": "^3.8.0",
     "ws": "^8.18.3",
     "zod": "^3.25.76",
     "zod-validation-error": "^4.0.2"

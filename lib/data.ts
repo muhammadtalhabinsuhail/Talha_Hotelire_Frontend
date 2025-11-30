@@ -211,3 +211,83 @@ export const listings: Listing[] = [
     description: "Situated in Caledon, 44 km from Mississauga Convention Centre, Mount Alverno Luxury Resorts features accommodation with a terrace, free private parking and a bar.",
   },
 ];
+
+export interface Property {
+  featured: string;
+  id: string
+  image: string
+  isSponsored: boolean
+  tags: string[]
+  title: string
+  address: string
+  visitors: number
+  downPayment: number
+  installmentPrice: number
+  installmentsCount: number
+  firstDuePayment: string
+  price: number
+  paymentsCount: number
+}
+
+export const properties: Property[] = [
+  {
+    id: "1",
+    image: "/luxury-villa-exterior.jpg",
+    isSponsored: true,
+    tags: ["For Sale", "For Rent", "Open House", "Villa", "Near Park", "Downtown"],
+    title: "3 Bed Room Commercial Villa in Avenfield London",
+    address: "Avenfield, London",
+    visitors: 20,
+    downPayment: 3200,
+    installmentPrice: 650,
+    installmentsCount: 36,
+    firstDuePayment: "14-12-2023",
+    price: 2450,
+    paymentsCount: 4,
+  },
+  {
+    id: "2",
+    image: "/modern-studio-apartment.jpg",
+    isSponsored: true,
+    tags: ["For Sale", "For Rent", "Open House", "Villa", "Near Park", "Downtown"],
+    title: "Studio in the Heart of Downtown Near Market",
+    address: "Avenfield, London",
+    visitors: 20,
+    downPayment: 3200,
+    installmentPrice: 650,
+    installmentsCount: 36,
+    firstDuePayment: "14-12-2023",
+    price: 4750,
+    paymentsCount: 4,
+  },
+  {
+    id: "3",
+    image: "/suburban-house-autumn.jpg",
+    isSponsored: true,
+    tags: ["For Sale", "For Rent", "Open House", "Villa", "Near Markt", "4 Car Parking"],
+    title: "The Sphere, Hallsville Road, Canning Town E16",
+    address: "Avenfield, London",
+    visitors: 20,
+    downPayment: 3200,
+    installmentPrice: 650,
+    installmentsCount: 36,
+    firstDuePayment: "14-12-2023",
+    price: 6230,
+    paymentsCount: 4,
+  },
+  {
+    id: "4",
+    image: "/large-family-home-pool.jpg",
+    isSponsored: true,
+    tags: ["For Sale", "For Rent", "Open House", "Villa", "Swimming Pool"],
+    title: "Adana Building, Conington Road, London, SE13",
+    address: "Avenfield, London",
+    visitors: 20,
+    downPayment: 3200,
+    installmentPrice: 650,
+    installmentsCount: 36,
+    firstDuePayment: "14-12-2023",
+    price: 10097,
+    paymentsCount: 4,
+  },
+]

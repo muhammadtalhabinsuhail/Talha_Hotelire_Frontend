@@ -1,43 +1,33 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Building2,
-  Calendar,
-  Users,
-  Settings,
-  FileText,
-  BarChart3,
-  Menu,
-  X,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Settings, Menu } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 interface NavItem {
-  title: string;
-  href: string;
-  icon: any;
+  title: string
+  href: string
+  icon: any
 }
 
 interface DashboardSidebarProps {
-  navItems: NavItem[];
-  userType: "admin" | "owner";
+  navItems: NavItem[]
+  userType: "admin" | "owner"
 }
 
 export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) {
-  const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-white border-r border-gray-200">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
-        <h1 className="[font-family:'Poppins',Helvetica] font-bold text-[#3f2c77] text-xl">
+        <h1 className="[font-family:'Poppins',Helvetica] font-bold text-[#59A5B2] text-xl">
           {userType === "admin" ? "Super Admin" : "Property Owner"}
         </h1>
       </div>
@@ -45,9 +35,9 @@ export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
         {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
-          
+          const Icon = item.icon
+          const isActive = pathname === item.href
+
           return (
             <Link
               key={item.href}
@@ -57,15 +47,13 @@ export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) 
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                 "[font-family:'Inter',Helvetica] font-medium text-sm",
-                isActive
-                  ? "bg-[#3f2c77] text-white shadow-md"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-[#3f2c77]"
+                isActive ? "bg-[#59A5B2] text-white shadow-md" : "text-gray-700 hover:bg-gray-100 hover:text-[#59A5B2]",
               )}
             >
               <Icon className="w-5 h-5" />
               <span>{item.title}</span>
             </Link>
-          );
+          )
         })}
       </nav>
 
@@ -79,8 +67,8 @@ export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) 
             "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
             "[font-family:'Inter',Helvetica] font-medium text-sm",
             pathname === "/settings"
-              ? "bg-[#3f2c77] text-white shadow-md"
-              : "text-gray-700 hover:bg-gray-100 hover:text-[#3f2c77]"
+              ? "bg-[#59A5B2] text-white shadow-md"
+              : "text-gray-700 hover:bg-gray-100 hover:text-[#59A5B2]",
           )}
         >
           <Settings className="w-5 h-5" />
@@ -88,7 +76,7 @@ export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) 
         </Link>
       </div>
     </div>
-  );
+  )
 
   return (
     <>
@@ -101,7 +89,7 @@ export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) 
             className="fixed top-4 left-4 z-50 bg-white shadow-md"
             data-testid="button-mobile-menu"
           >
-            <Menu className="w-6 h-6 text-[#3f2c77]" />
+            <Menu className="w-6 h-6 text-[#59A5B2]" />
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-64">
@@ -114,5 +102,5 @@ export function DashboardSidebar({ navItems, userType }: DashboardSidebarProps) 
         <SidebarContent />
       </div>
     </>
-  );
+  )
 }

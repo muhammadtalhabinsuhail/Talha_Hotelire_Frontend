@@ -1,6 +1,5 @@
 "use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { SlidersHorizontal, MapPin, Grid, Map } from "lucide-react";
 import { Header } from "@/components/Header";
@@ -10,6 +9,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { ListingCard } from "@/components/ListingCard";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"
 import {
   Select,
   SelectContent,
@@ -25,6 +25,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { listings } from "@/lib/data";
+import { Listing } from "@/types";
+import axios from "axios";
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export default function ListingPage() {
   const [sortBy, setSortBy] = useState("recommended");
@@ -32,32 +35,66 @@ export default function ListingPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Sort listings based on selected option
-  const sortedListings = [...listings].sort((a, b) => {
-    switch (sortBy) {
-      case "price-low":
-        return (
-          parseInt(a.price.replace(/[^0-9]/g, "")) -
-          parseInt(b.price.replace(/[^0-9]/g, ""))
-        );
-      case "price-high":
-        return (
-          parseInt(b.price.replace(/[^0-9]/g, "")) -
-          parseInt(a.price.replace(/[^0-9]/g, ""))
-        );
-      case "rating":
-        return parseFloat(b.rating) - parseFloat(a.rating);
-      case "stars":
-        return parseFloat(b.rating) - parseFloat(a.rating);
-      default:
-        return 0; // recommended - keep original order
-    }
-  });
+  const router = useRouter();
+  const [Properties, setProperties] = useState<Listing[]>([])
 
-  const totalPages = Math.ceil(sortedListings.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentListings = sortedListings.slice(startIndex, endIndex);
+
+  const mapPropertyToCard = (property: any) => {
+    const roomTypes = [
+      ...new Set(
+        property.propertyroom
+          ?.map((room: any) => room.roomtype?.roomtypename)
+          .filter(Boolean)
+      )
+    ];
+
+    const featuredAmenities = property.propertyamenities
+      ?.filter((a: any) => a.features === true)
+      .map((a: any) => a.amenities?.amenitiesname)
+      .filter(Boolean);
+
+    const prices = property.propertyroom
+      ?.map((room: any) => room.price)
+      .filter((p: number) => p !== null && p !== undefined);
+
+    const minPrice = prices?.length ? Math.min(...prices) : null;
+
+    return {
+      id: property.propertyid,
+      name: property.propertytitle,
+      classification: property.propertyclassification?.propertyclassificationname,
+      mapUrl: property.propertymaplink,
+      rating: 4.0,
+      image: property.photo1_featured,
+      roomTypes,
+      checkIn: property.checkintime,
+      checkOut: property.checkouttime,
+      amenities: featuredAmenities,
+      price: minPrice
+    };
+  };
+
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await axios.get(`${baseUrl}/ownerProperty/getProperties`);
+        const cardsData = res.data.properties.map((p: any) =>
+
+          mapPropertyToCard(p)
+        );
+        console.log("Cards Data", cardsData);
+        setProperties(cardsData);
+      } catch (ex) {
+        alert("Something went wrong");
+        router.push("/");
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+
 
   return (
     <div className="bg-white w-full flex flex-col min-h-screen">
@@ -65,7 +102,7 @@ export default function ListingPage() {
       <Navigation />
 
       {/* Search Section */}
-      <section className="w-full bg-[#f5f6fd] py-6 md:py-8 px-4 md:px-8 lg:px-[203px]">
+      <section className="w-full bg-[#f5f6fd] py-6 md:py-8 px-4 md:px-8 lg:px-[203px] flex justify-center">
         <SearchBar />
       </section>
 
@@ -82,7 +119,7 @@ export default function ListingPage() {
             {/* Header with Sort and View Toggle */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h1 className="[font-family:'Poppins',Helvetica] font-bold text-[#3f2c77] text-xl md:text-2xl mb-2">
+                <h1 className="[font-family:'Poppins',Helvetica] font-bold text-[#59a5b2] text-xl md:text-2xl mb-2">
                   Hotels in Ontario
                 </h1>
                 <p className="[font-family:'Inter',Helvetica] font-medium text-gray-600 text-sm md:text-base">
@@ -108,7 +145,7 @@ export default function ListingPage() {
                     className="w-[300px] overflow-y-auto"
                   >
                     <SheetHeader>
-                      <SheetTitle className="[font-family:'Poppins',Helvetica] font-bold text-[#3f2c77]">
+                      <SheetTitle className="[font-family:'Poppins',Helvetica] font-bold text-[#59a5b2]">
                         Filters
                       </SheetTitle>
                     </SheetHeader>
@@ -159,7 +196,7 @@ export default function ListingPage() {
                   <Button
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="sm"
-                    className={`px-3 ${viewMode === "list" ? "bg-[#3f2c77] hover:bg-[#2a2158]" : ""}`}
+                    className={`px-3 ${viewMode === "list" ? "bg-[#59a5b2] hover:bg-[#2a2158]" : ""}`}
                     onClick={() => setViewMode("list")}
                     data-testid="button-view-list"
                   >
@@ -168,7 +205,7 @@ export default function ListingPage() {
                   <Button
                     variant={viewMode === "map" ? "default" : "ghost"}
                     size="sm"
-                    className={`px-3 ${viewMode === "map" ? "bg-[#3f2c77] hover:bg-[#2a2158]" : ""}`}
+                    className={`px-3 ${viewMode === "map" ? "bg-[#59a5b2] hover:bg-[#2a2158]" : ""}`}
                     onClick={() => setViewMode("map")}
                     data-testid="button-view-map"
                   >
@@ -181,7 +218,7 @@ export default function ListingPage() {
             {/* Listings - List View */}
             {viewMode === "list" && (
               <div className="space-y-4">
-                {currentListings.map((listing) => (
+                {Properties.map((listing) => (
                   <ListingCard key={listing.id} listing={listing} />
                 ))}
               </div>
@@ -191,8 +228,8 @@ export default function ListingPage() {
             {viewMode === "map" && (
               <div className="w-full h-[600px] bg-gray-100 rounded-lg flex items-center justify-center border border-gray-300">
                 <div className="text-center">
-                  <MapPin className="w-12 h-12 text-[#3f2c77] mx-auto mb-4" />
-                  <p className="[font-family:'Poppins',Helvetica] font-semibold text-[#3f2c77] text-lg mb-2">
+                  <MapPin className="w-12 h-12 text-[#59a5b2] mx-auto mb-4" />
+                  <p className="[font-family:'Poppins',Helvetica] font-semibold text-[#59a5b2] text-lg mb-2">
                     Map View
                   </p>
                   <p className="[font-family:'Inter',Helvetica] text-gray-600 text-sm">
@@ -203,7 +240,7 @@ export default function ListingPage() {
             )}
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {/* {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-8">
                 <Button
                   variant="outline"
@@ -222,7 +259,7 @@ export default function ListingPage() {
                       variant={currentPage === page ? "default" : "outline"}
                       className={
                         currentPage === page
-                          ? "bg-[#3f2c77] hover:bg-[#2a2158]"
+                          ? "bg-[#59a5b2] hover:bg-[#2a2158]"
                           : ""
                       }
                       onClick={() => setCurrentPage(page)}
@@ -243,7 +280,7 @@ export default function ListingPage() {
                   Next
                 </Button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </section>
