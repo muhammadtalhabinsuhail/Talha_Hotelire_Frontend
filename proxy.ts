@@ -6,7 +6,11 @@ export async function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   const token = request.cookies.get("token")?.value;
 
+
+
   if (!token) {
+     
+
     if (url.pathname.startsWith("/admin") || url.pathname.startsWith("/owner")) {
       url.pathname = "/customer/signin";
       return NextResponse.redirect(url);

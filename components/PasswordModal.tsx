@@ -53,12 +53,13 @@ export function PasswordModal({
 
       const response = await axios.post(
         `${baseUrl}/auth/login`,
-        { email:email, 
-          passwordhash:password 
-        }, 
+        {
+          email: email,
+          passwordhash: password
+        },
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
 
@@ -66,13 +67,10 @@ export function PasswordModal({
 
 
       if (response.data.message == "Login successful") {
-       
-
         const userResponse = await axios.get(`${baseUrl}/auth/me`, { withCredentials: true });
-        if(userResponse){
-           onLoginSuccess();
+        if (userResponse) {
+          onLoginSuccess();
         }
-     
       } else {
         setError(response.data.message || "Incorrect password. Please try again.");
         setPassword("");

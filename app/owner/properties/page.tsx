@@ -226,9 +226,18 @@ export default function PropertiesPage() {
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
           <AnimatePresence>
-            {filteredProperties.map((property) => (
-              <PropertyCard key={property.propertyid} property={property} onDelete={() => setDeleteId(property.propertyid)} />
-            ))}
+
+
+            {filteredProperties ?
+              filteredProperties.map((property) => (
+                <PropertyCard key={property.propertyid} property={property} onDelete={() => setDeleteId(property.propertyid)} />
+              )) : <div className="col-span-full text-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">No properties found.</p>
+              </div>
+
+            }
+
+
           </AnimatePresence>
         </div>
 

@@ -41,7 +41,15 @@ export function Header() {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post(`${baseUrl}/auth/logout`, {}, { withCredentials: true });
+
+
+      const res = await axios.post(`${baseUrl}/auth/logout`,
+         {},
+          { withCredentials: true }
+        );
+
+        
+
       router.push("/")
     } catch (ex) {
       alert("Something went wrong! Unable to logout");
@@ -51,6 +59,9 @@ export function Header() {
   useEffect(() => {
     getUser();
   }, [])
+
+
+
 
 
 
@@ -110,16 +121,16 @@ export function Header() {
             aria-label="Login"
           >
 
-            
-            
-                <Image
-                  src="/figmaAssets/login.png"
-                  alt="User avatar"
-                  width={32}
-                  height={32}
-                  className="w-6 h-6 rounded-full"
-                /> 
-             
+
+
+            <Image
+              src="/figmaAssets/login.png"
+              alt="User avatar"
+              width={32}
+              height={32}
+              className="w-6 h-6 rounded-full"
+            />
+
 
 
             <Link
@@ -138,7 +149,7 @@ export function Header() {
                 aria-label="User menu"
               >
                 <Image
-                 src={ProfilePic || "/figmaAssets/login.png"}
+                  src={ProfilePic || "/figmaAssets/login.png"}
                   alt="User avatar"
                   width={32}
                   height={32}
